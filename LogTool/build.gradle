@@ -47,7 +47,7 @@ task generateSourcesJar(type: Jar) {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        release(MavenPublication) {
 
             // implementation 'com.github.timmymike.LogTool:$version_tag'
 

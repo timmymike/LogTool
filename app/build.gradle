@@ -39,8 +39,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
-//    implementation project(":LogTool")
-    implementation 'com.github.timmymike:LogTool:v0.0.5'
+    implementation project(":LogTool")
+//    implementation 'com.github.timmymike:LogTool:1.0.0'
 
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 

@@ -49,7 +49,7 @@ publishing {
     publications {
         maven(MavenPublication) {
 
-            // implementation 'com.github.timmymike.LogUtils:$version_tag'
+            // implementation 'com.github.timmymike.LogTool:$version_tag'
 
             groupId = 'com.github.timmymike'
             artifactId = 'LogTool'

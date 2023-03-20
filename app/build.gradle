@@ -40,5 +40,5 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
 //    implementation project(":LogTool")
-//    implementation 'com.github.timmymike:LogTool:v0.0.3'
+    implementation 'com.github.timmymike:LogTool:v0.0.4'
 }

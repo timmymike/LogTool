@@ -45,17 +45,15 @@ task generateSourcesJar(type: Jar) {
     classifier 'sources'
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-
-            // implementation 'com.github.timmymike.LogTool:$version_tag'
-
-            groupId = 'com.github.timmymike'
-            artifactId = 'LogTool'
-
-            artifact generateSourcesJar {
-                classifier "sourcesJar"
+afterEvaluate {
+    publishing {
+        publications {
+            Production(MavenPublication) {
+                from components.release
+                groupId = 'com.github.timmymike'
+                artifactId = 'LogTool'
+                // 上傳 source code，這樣使用方可以看到註解
+                artifact generateSourcesJar
             }
         }
     }

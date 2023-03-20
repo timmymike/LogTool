@@ -51,8 +51,8 @@ publishing {
 
             // implementation 'com.github.timmymike.LogUtils:$version_tag'
 
-//            groupId = 'com.github.timmymike'
-//            artifactId = 'LogTool'
+            groupId = 'com.github.timmymike'
+            artifactId = 'LogTool'
 
             artifact generateSourcesJar {
                 classifier "sourcesJar"

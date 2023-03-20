@@ -15,6 +15,8 @@ class LogSampleActivity : AppCompatActivity() {
     }
 
     private fun logSample() {
+        // 集合方法使用範例
+        sampleForCollectionLog()
 
         // 計時方法內容型使用範例：
         sampleForCalculateTimeInterval()
@@ -30,6 +32,10 @@ class LogSampleActivity : AppCompatActivity() {
 
         // Gson的toJson和資料類別互轉
         sampleForGsonTools(getDataFromAssets("test_to_print_short.json") ?: return)
+
+    }
+
+    private fun sampleForCollectionLog() {
 
     }
 

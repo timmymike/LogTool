@@ -12,6 +12,7 @@ import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.Collection
 
 object LogOption {
     // 控制列印log日誌的每行字數
@@ -83,6 +84,25 @@ fun logWtf(filePath: File, tagName: String, msg: String, writeType: WriteType = 
     writeToFile(filePath, "${getNowTimeFormat()} $tagName <Thread name:${Thread.currentThread().name}>: $msg $END_LINE", writeType)
 }
 
+/** 集合的Log (Collection和 Map)*/
+
+fun <T : Any> Collection<T>.logvAll(tagName: String = logDefaultTag ?: "") = this.forEach { logv(tagName, it.toString()) }
+fun <T : Any> Collection<T>.logdAll(tagName: String = logDefaultTag ?: "") = this.forEach { logd(tagName, it.toString()) }
+fun <T : Any> Collection<T>.logiAll(tagName: String = logDefaultTag ?: "") = this.forEach { logi(tagName, it.toString()) }
+fun <T : Any> Collection<T>.logwAll(tagName: String = logDefaultTag ?: "") = this.forEach { logw(tagName, it.toString()) }
+fun <T : Any> Collection<T>.logeAll(tagName: String = logDefaultTag ?: "") = this.forEach { loge(tagName, it.toString()) }
+
+fun <K : Any, V : Any> Map<K, V>.logvKeyAll(tagName: String = logDefaultTag ?: "") = this.keys.forEach { logv(tagName, it.toString()) }
+fun <K : Any, V : Any> Map<K, V>.logdKeyAll(tagName: String = logDefaultTag ?: "") = this.keys.forEach { logd(tagName, it.toString()) }
+fun <K : Any, V : Any> Map<K, V>.logiKeyAll(tagName: String = logDefaultTag ?: "") = this.keys.forEach { logi(tagName, it.toString()) }
+fun <K : Any, V : Any> Map<K, V>.logwKeyAll(tagName: String = logDefaultTag ?: "") = this.keys.forEach { logw(tagName, it.toString()) }
+fun <K : Any, V : Any> Map<K, V>.logeKeyAll(tagName: String = logDefaultTag ?: "") = this.keys.forEach { loge(tagName, it.toString()) }
+
+fun <K : Any, V : Any> Map<K, V>.logvValueAll(tagName: String = logDefaultTag ?: "") = this.values.forEach { logv(tagName, it.toString()) }
+fun <K : Any, V : Any> Map<K, V>.logdValueAll(tagName: String = logDefaultTag ?: "") = this.values.forEach { logd(tagName, it.toString()) }
+fun <K : Any, V : Any> Map<K, V>.logiValueAll(tagName: String = logDefaultTag ?: "") = this.values.forEach { logi(tagName, it.toString()) }
+fun <K : Any, V : Any> Map<K, V>.logwValueAll(tagName: String = logDefaultTag ?: "") = this.values.forEach { logw(tagName, it.toString()) }
+fun <K : Any, V : Any> Map<K, V>.logeValueAll(tagName: String = logDefaultTag ?: "") = this.values.forEach { loge(tagName, it.toString()) }
 
 /**找到是哪裡呼叫到這裡的(呼叫路徑追蹤方法)
  * 使用方法：
@@ -105,7 +125,7 @@ fun Throwable.trace(TAG: String = logDefaultTag ?: "TRACE LOG") {
 fun calculateTimeStep(stepTime: Long, tagName: String = logDefaultTag ?: "CalculateTime LOG"): Long {
     return System.currentTimeMillis().apply {
         if (this - stepTime != 0L)
-            loge(logDefaultTag ?:"calculateTimeStep LOG", "於[${tagName}]，與上一階段相差時間是${this - stepTime}毫秒")
+            loge(logDefaultTag ?: "calculateTimeStep LOG", "於[${tagName}]，與上一階段相差時間是${this - stepTime}毫秒")
     }
 }
 
@@ -175,7 +195,7 @@ private fun createStackElementTag(element: StackTraceElement): String {
 
 /**印多行文字(例如Json)的時候，可以強迫AndroidStudio全部印出的方法：*/
 private fun logMsgMultiLine(msg: String?, tagName: String, type: LogLevelType) {
-    msg?.let {content->
+    msg?.let { content ->
         val strLength = content.length
         var start = 0
         var end = LogOption.LOG_MAX_LENGTH

@@ -50,8 +50,8 @@ afterEvaluate {
         publications {
             Production(MavenPublication) {
                 from components.release
-                groupId = 'com.github.timmymike'
-                artifactId = 'LogTool'
+//                groupId = 'com.github.timmymike'
+//                artifactId = 'LogTool'
                 // 上傳 source code，這樣使用方可以看到註解
                 artifact generateSourcesJar
             }

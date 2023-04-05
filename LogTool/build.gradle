@@ -45,6 +45,7 @@ task generateSourcesJar(type: Jar) {
     classifier 'sources'
 }
 
+
 afterEvaluate {
     publishing {
         publications {

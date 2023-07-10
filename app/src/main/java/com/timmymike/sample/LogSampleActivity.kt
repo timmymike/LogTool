@@ -42,7 +42,7 @@ class LogSampleActivity : AppCompatActivity() {
     private fun sampleForGsonTools(data: String) {
         loge("轉換為DataBean的內容是=>${data.toDataBean(SampleData::class.java)}")
         loge("此內容轉為Json是=>${data.toDataBean(SampleData::class.java)?.toJson()}")
-
+        data.toDataBean(SampleData::class.java)?.toJsonAndLoge("範例印出")
         loge("sampleForGsonTools", "Gson方法範例執行完成")
     }
 

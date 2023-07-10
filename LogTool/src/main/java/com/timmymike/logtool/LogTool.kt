@@ -6,6 +6,7 @@ import android.os.StatFs
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import java.io.*
@@ -138,15 +139,23 @@ fun calculateTimeInterval(tagName: String = logDefaultTag ?: "CalculateTime LOG"
     loge(tagName, "花費時間共計${System.currentTimeMillis() - startTime}毫秒。")
 }
 
+inline fun <reified T> String.toDataBeanList(): List<T> {
+    return GsonBuilder().create().fromJson(this, object : TypeToken<List<T>>() {}.type)
+}
 
 /**
  * Gson 的格式互轉
  * */
-fun <T> String?.toDataBean(classOfT: Class<T>?): T? {
-
+fun <T> String.toDataBean(classOfT: Class<T>?): T? {
     return if (this.isJson()) Gson().fromJson(this, classOfT)
     else null
 }
+
+fun <T : Any> T.toJsonAndLogv(tagName: String = logDefaultTag ?: "toJsonAndLogv"): String = this.toJson().apply { logv(tagName,this) }
+fun <T : Any> T.toJsonAndLogd(tagName: String = logDefaultTag ?: "toJsonAndLogd"): String = this.toJson().apply { logd(tagName,this) }
+fun <T : Any> T.toJsonAndLogi(tagName: String = logDefaultTag ?: "toJsonAndLogi"): String = this.toJson().apply { logi(tagName,this) }
+fun <T : Any> T.toJsonAndLogw(tagName: String = logDefaultTag ?: "toJsonAndLogw"): String = this.toJson().apply { logw(tagName,this) }
+fun <T : Any> T.toJsonAndLoge(tagName: String = logDefaultTag ?: "toJsonAndLoge"): String = this.toJson().apply { loge(tagName,this) }
 
 fun <T : Any> T.toJson(): String {
     return GsonBuilder().disableHtmlEscaping().create().toJson(this) ?: ""

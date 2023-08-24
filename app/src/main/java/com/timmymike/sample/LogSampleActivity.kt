@@ -44,7 +44,7 @@ class LogSampleActivity : AppCompatActivity() {
         // =====字串轉類別=====
 
         // 轉換為 物件
-        val transferData: SampleData? = data.toDataBean(SampleData::class.java)
+        val transferData: SampleData? = data.toDataBean<SampleData>()
 
         // 處理或印出
         loge("專用型 物件測試轉譯結果=>${transferData}")

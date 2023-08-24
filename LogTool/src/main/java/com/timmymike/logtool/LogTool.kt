@@ -199,13 +199,13 @@ inline fun <reified T> String.toData(): T? {
  * data.toDataBeanList<Record>()
  */
 
-fun <T> String.toDataBeanList(): List<T>? {
+inline fun <reified T> String.toDataBeanList(): List<T>? {
     return if (this.isJson()) Gson().fromJson(this, object : TypeToken<List<T>>() {}.type)
     else null
 }
 
-fun <T> String.toDataBean(classOfT: Class<T>?): T? {
-    return if (this.isJson()) Gson().fromJson(this, classOfT)
+inline fun <reified T>  String.toDataBean(): T? {
+    return if (this.isJson()) Gson().fromJson(this,  T::class.java)
     else null
 }
 
@@ -213,10 +213,10 @@ fun <T> String.toDataBean(classOfT: Class<T>?): T? {
  *  直接將物件印出的鍊式表達式：
  *
  * */
-fun <T : Any> T.forLogv(preString: String = "", tagName: String = logDefaultTag ?: "for Logv"): T = apply { loge(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forLogd(preString: String = "", tagName: String = logDefaultTag ?: "for Logd"): T = apply { loge(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forLogi(preString: String = "", tagName: String = logDefaultTag ?: "for Logi"): T = apply { loge(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forLogw(preString: String = "", tagName: String = logDefaultTag ?: "for Logw"): T = apply { loge(tagName, "${preString}${this@apply}") }
+fun <T : Any> T.forLogv(preString: String = "", tagName: String = logDefaultTag ?: "for Logv"): T = apply { logv(tagName, "${preString}${this@apply}") }
+fun <T : Any> T.forLogd(preString: String = "", tagName: String = logDefaultTag ?: "for Logd"): T = apply { logd(tagName, "${preString}${this@apply}") }
+fun <T : Any> T.forLogi(preString: String = "", tagName: String = logDefaultTag ?: "for Logi"): T = apply { logi(tagName, "${preString}${this@apply}") }
+fun <T : Any> T.forLogw(preString: String = "", tagName: String = logDefaultTag ?: "for Logw"): T = apply { logw(tagName, "${preString}${this@apply}") }
 fun <T : Any> T.forLoge(preString: String = "", tagName: String = logDefaultTag ?: "for Loge"): T = apply { loge(tagName, "${preString}${this@apply}") }
 
 /**

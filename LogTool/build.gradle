@@ -38,6 +38,9 @@ dependencies {
     // Coroutine
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
+    // 取得變數名稱的反射庫
+//    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.32"
+
 }
 
 task generateSourcesJar(type: Jar) {

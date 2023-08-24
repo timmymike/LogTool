@@ -66,13 +66,13 @@ data class Record(
     @SerializedName("value7")
     val value7: String
 ) {
-    fun getValueByField(propertyName: String) = this::class.members.find { it.name == propertyName }.let {
-        if (it is kotlin.reflect.KProperty<*>) {
-            it.getter.call(this).toString()
-        } else {
-            "null"
-        }
-    }
+//    fun getValueByField(propertyName: String) = this::class.members.find { it.name == propertyName }.let {
+//        if (it is kotlin.reflect.KProperty<*>) {
+//            it.getter.call(this).toString()
+//        } else {
+//            "null"
+//        }
+//    }
 }
 
 data class Info(

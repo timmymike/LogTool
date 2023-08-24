@@ -11,6 +11,7 @@ class LogSampleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         logSample()
     }
 
@@ -36,14 +37,34 @@ class LogSampleActivity : AppCompatActivity() {
     }
 
     private fun sampleForCollectionLog() {
-
+        listOf(1, 2, 3).logdAll("測試列表印出=>")
     }
 
     private fun sampleForGsonTools(data: String) {
-        loge("轉換為DataBean的內容是=>${data.toDataBean(SampleData::class.java)}")
-        loge("此內容轉為Json是=>${data.toDataBean(SampleData::class.java)?.toJson()}")
-        data.toDataBean(SampleData::class.java)?.toJsonAndLoge("範例印出")
-        loge("sampleForGsonTools", "Gson方法範例執行完成")
+        // =====字串轉類別=====
+
+        // 轉換為 物件
+        val transferData: SampleData? = data.toDataBean(SampleData::class.java)
+
+        // 處理或印出
+        loge("專用型 物件測試轉譯結果=>${transferData}")
+
+        // 轉換為 List 物件
+        transferData?.records?.toJson()?.toDataBeanList<Record>()?.forLoge("專用型 列表測試轉譯結果=>")
+
+        // 轉換為物件、List物件通用型：toData方法使用範例：
+        val transferData2: SampleData? = data.toData<SampleData>()
+        val recordsList: List<Record>? = transferData2?.records?.toJson()?.toData<List<Record>>()
+
+        // 處理或印出
+        transferData2?.forLoge("通用型 物件測試轉譯結果=>")
+        recordsList?.getOrNull(0)?.item2?.forLoge("通用型 列表測試轉譯結果第1個item2=>")
+
+        // =====類別轉字串=====
+        transferData?.toJson()?.forLoge("鍊式方法 轉換為Json字串並印出的結果=>")
+        transferData?.forJsonAndLoge("單一方法 轉換為Json字串並印出的結果=>")
+
+        loge("sampleForGsonTools", "使用Gson將Json字串與類別互轉 範例執行完成")
     }
 
     private fun sampleForLogWriteToFile() = CoroutineScope(Dispatchers.Default).launch {
@@ -90,8 +111,8 @@ class LogSampleActivity : AppCompatActivity() {
     // 計時方法內容型使用範例：
     private fun sampleForCalculateTimeInterval() = CoroutineScope(Dispatchers.Default).launch {
         calculateTimeInterval("某件事的計時") {
-            loge("我做了某件事")
-            delay(1000L)
+            loge("我即將開始做了某件事")
+            delay(1000L) // 模擬做某件事
             loge("某件事已經完成了")
         }
 
@@ -103,11 +124,10 @@ class LogSampleActivity : AppCompatActivity() {
             withContext(Dispatchers.Default) {
                 // 讀取檔案(一大串Json)後印出範例。
                 kotlin.runCatching {
-                    assets.open("test_to_print.json").bufferedReader().use { it.readText() }
-                        .apply {
-                            loge(this)
-                            loge("sampleForLogMultipleLine", "多行Log方法示範完成")
-                        }
+                    getDataFromAssets("test_to_print.json").apply {
+                        loge(this)
+                        loge("sampleForLogMultipleLine", "多行Log方法示範完成")
+                    }
                 }.onFailure { e -> loge("讀取錯誤！原因：${e.message}", e) }.getOrNull()
             }
         }

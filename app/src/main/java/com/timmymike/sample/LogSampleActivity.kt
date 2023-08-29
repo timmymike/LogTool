@@ -34,7 +34,17 @@ class LogSampleActivity : AppCompatActivity() {
         // Gson的toJson和資料類別互轉
         sampleForGsonTools(getDataFromAssets("test_to_print_short.json") ?: return)
 
+        // 數字格式化範例
+        sampleForDigitFormat()
+
     }
+
+    private fun sampleForDigitFormat() {
+        "000".let{10.format(it).forLoge("${it}格式化輸出為=>")}
+        "0000".let{20L.format(it).forLoge("${it}格式化輸出為=>")}
+        "00.##".let{ 5.789923f.format(it).forLoge("${it}格式化輸出為=>")}
+    }
+
 
     private fun sampleForCollectionLog() {
         listOf(1, 2, 3).logdAll("測試列表印出=>")

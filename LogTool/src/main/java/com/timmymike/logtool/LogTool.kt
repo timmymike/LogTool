@@ -124,57 +124,10 @@ fun Throwable.trace(preString: String = "", TAG: String = logDefaultTag ?: "TRAC
 
 }
 
-/**
- * 執行多久計時工具(階段型)
- * 使用範例：
-val timeList = mutableListOf(System.currentTimeMillis())  // 開始計時
-
-delay(1000) // 實際上處理了一些事情
-
-timeList.add(calculateTimeStep(timeList[0], "第一步驟"))
-
-delay(2000) // 實際上又處理了一些事情
-
-timeList.add(calculateTimeStep(timeList[1], "第二步驟"))
-
-delay(3000) // 實際上再處理了一些事情
-
-timeList.add(calculateTimeStep(timeList[2], "第三步驟"))
-
-loge("sampleForCalculateTimeStep", "階段型計時方法示範完成")
- * */
-fun calculateTimeStep(stepTime: Long, tagName: String = logDefaultTag ?: "CalculateTime LOG"): Long {
-    return System.currentTimeMillis().apply {
-        if (this - stepTime != 0L)
-            loge(logDefaultTag ?: "calculateTimeStep LOG", "於[${tagName}]，與上一階段相差時間是${this - stepTime}毫秒")
-    }
-}
-
-/**
- * 執行多久計時工具(內容型)
- * 使用範例：
-calculateTimeInterval("某件事的計時") {
-
-loge("我即將開始做了某件事")
-
-delay(1000L) // 模擬做某件事
-
-loge("某件事已經完成了")
-
-}
- * */
-
-fun calculateTimeInterval(tagName: String = logDefaultTag ?: "CalculateTime LOG", function: suspend () -> Unit) = runBlocking {
-    val startTime = System.currentTimeMillis()
-    loge(tagName, "計時開始。")
-    function.invoke()
-    loge(tagName, "花費時間共計${System.currentTimeMillis() - startTime}毫秒。")
-}
-
 private enum class LogLevelType { Verbose, Debug, Info, Warning, Error }
 
 @get:JvmSynthetic
-private val logDefaultTag: String?
+val logDefaultTag: String?
     get() = Throwable().stackTrace.getOrNull(2)?.let(::createStackElementTag)
 
 private const val MAX_TAG_LENGTH = 23
@@ -308,95 +261,4 @@ private fun getStoreFileName(filePath: File) = filePath.name.let {
     it.substring(0, it.lastIndexOf(".")) + // 檔案名稱
             "_${getNowTimeFormat()}" + // 時間戳記
             it.substring(it.lastIndexOf("."), it.length) // 副檔名
-}
-
-/**
- * Gson 的格式互轉
- *
- * */
-
-/**
- * toData，通用型 轉換方法
- * 使用範例：
- * "{...}".toData<SampleData>
- * or
- * "[{...},{...},...]".toData<List<Record>>
- * */
-
-inline fun <reified T> String.toData(): T? {
-    return kotlin.runCatching {
-        when {
-            startsWith("{") -> Gson().fromJson(this, T::class.java)
-            startsWith("[") -> Gson().fromJson(this@toData, object : TypeToken<T>() {}.type)
-            else -> null
-        }
-    }.onFailure { loge("轉譯錯誤，錯誤資訊=>", it) }.getOrNull()
-}
-
-/**
- * toDataBeanList，不用再將List型別傳入，只需傳入List內的物件即可。
- * 使用範例：
- * data.toDataBeanList<Record>()
- */
-
-inline fun <reified T> String.toDataBeanList(): List<T>? {
-    return if (this.isJson()) Gson().fromJson(this, object : TypeToken<List<T>>() {}.type)
-    else null
-}
-
-inline fun <reified T>  String.toDataBean(): T? {
-    return if (this.isJson()) Gson().fromJson(this,  T::class.java)
-    else null
-}
-
-/**
- *  直接將物件印出的鍊式表達式：
- *
- * */
-fun <T : Any> T.forLogv(preString: String = "", tagName: String = logDefaultTag ?: "for Logv"): T = apply { logv(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forLogd(preString: String = "", tagName: String = logDefaultTag ?: "for Logd"): T = apply { logd(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forLogi(preString: String = "", tagName: String = logDefaultTag ?: "for Logi"): T = apply { logi(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forLogw(preString: String = "", tagName: String = logDefaultTag ?: "for Logw"): T = apply { logw(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forLoge(preString: String = "", tagName: String = logDefaultTag ?: "for Loge"): T = apply { loge(tagName, "${preString}${this@apply}") }
-
-/**
- *  直接將物件轉為Json後印出的鍊式表達式：
- *
- * */
-fun <T : Any> T.forJsonAndLogv(preString: String = "", tagName: String = logDefaultTag ?: "for Json And Logv"): String = this.toJson().apply { logv(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forJsonAndLogd(preString: String = "", tagName: String = logDefaultTag ?: "for Json And Logd"): String = this.toJson().apply { logd(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forJsonAndLogi(preString: String = "", tagName: String = logDefaultTag ?: "for Json And Logi"): String = this.toJson().apply { logi(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forJsonAndLogw(preString: String = "", tagName: String = logDefaultTag ?: "for Json And Logw"): String = this.toJson().apply { logw(tagName, "${preString}${this@apply}") }
-fun <T : Any> T.forJsonAndLoge(preString: String = "", tagName: String = logDefaultTag ?: "for Json And Loge"): String = this.toJson().apply { loge(tagName, "${preString}${this@apply}") }
-
-fun <T : Any> T.toJson(): String {
-    return GsonBuilder().disableHtmlEscaping().create().toJson(this) ?: ""
-}
-
-fun String?.isJson(): Boolean {
-    if (this.isNullOrEmpty()) {
-        loge("json is null or empty:: ${this.toString()}")
-        return false
-    }
-    return runCatching { JSONObject(this) }.getOrNull() != null // 是JSONObject
-            ||
-            runCatching { JSONArray(this) }.getOrNull() != null // 是JSONArray
-
-}
-
-
-fun Double.format(format: String = "#.#"): String {
-    return DecimalFormat(format).format(this)
-}
-
-fun Float.format(format: String = "#.#"): String {
-    return DecimalFormat(format).format(this)
-}
-
-fun Int.format(format: String = "#"): String {
-    return DecimalFormat(format).format(this)
-}
-
-fun Long.format(format: String = "#"): String {
-    return DecimalFormat(format).format(this)
 }

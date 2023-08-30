@@ -42,7 +42,14 @@ class LogSampleActivity : AppCompatActivity() {
     private fun sampleForDigitFormat() {
         "000".let{10.format(it).forLoge("${it}格式化輸出為=>")}
         "0000".let{20L.format(it).forLoge("${it}格式化輸出為=>")}
-        "00.##".let{ 5.789923f.format(it).forLoge("${it}格式化輸出為=>")}
+        "0.00000000".let{ 0.0789923f.format(it).forLoge("${it}格式化輸出為=>")}
+        "#.########".let{ 0.78923.format(it).forLoge("${it}格式化輸出為=>")}
+
+        "#.###".let{ 0.56.format(it).forLoge("${it}格式化輸出為=>")} //0.56
+        "0.000".let{ 0.56.format(it).forLoge("${it}格式化輸出為=>")} //0.560
+        "#.000".let{ 0.56.format(it).forLoge("${it}格式化輸出為=>")} //.560
+        "0.###".let{ 0.56.format(it).forLoge("${it}格式化輸出為=>")} //0.56
+
     }
 
 

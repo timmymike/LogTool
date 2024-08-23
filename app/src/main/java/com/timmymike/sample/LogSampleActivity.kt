@@ -51,8 +51,6 @@ class LogSampleActivity : AppCompatActivity() {
         "0.###".let{ 0.56.format(it).forLoge("${it}格式化輸出為=>")} //0.56
 
     }
-    // 
-
 
     private fun sampleForCollectionLog() {
         listOf(1, 2, 3).logdAll("測試列表印出=>")

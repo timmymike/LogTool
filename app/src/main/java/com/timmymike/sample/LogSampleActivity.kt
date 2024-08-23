@@ -51,6 +51,7 @@ class LogSampleActivity : AppCompatActivity() {
         "0.###".let{ 0.56.format(it).forLoge("${it}格式化輸出為=>")} //0.56
 
     }
+    // 
 
 
     private fun sampleForCollectionLog() {

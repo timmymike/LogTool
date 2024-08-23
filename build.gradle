@@ -9,7 +9,6 @@ buildscript {
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.2' // 更新版本號
 //        classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     }
     repositories {

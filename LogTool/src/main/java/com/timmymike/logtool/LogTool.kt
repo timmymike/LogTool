@@ -196,7 +196,7 @@ private data class WrapFile(
 
 private val fileMap by lazy { mutableMapOf<String, WrapFile>() }
 
-private fun getNowTimeFormat(): String = SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault()).format(Date())
+private fun getNowTimeFormat(): String = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(Date())
 
 private fun getInternalFreeSpaceInKB() =
     StatFs(Environment.getDataDirectory().absolutePath).let {
@@ -229,9 +229,9 @@ private fun writeToFile(filePath: File, msg: String, writeType: WriteType) {
 
         wrapFile?.catchMsg?.apply {
             add(msg)
-            takeIf { it.size >= (LogOption.COLLECT_LOG_SIZE) || wrapFile?.writeType == WriteType.Single }
+            takeIf { it.size >= (LogOption.COLLECT_LOG_SIZE) || wrapFile.writeType == WriteType.Single }
                 ?.joinToString("")
-                ?.let { wrapFile?.storeFile?.appendText(it) }
+                ?.let { wrapFile.storeFile?.appendText(it) }
                 ?.also { clear() }
         }
     } catch (e: IOException) {

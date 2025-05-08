@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace 'com.timmymike.logtool'
-    compileSdk 32
+    compileSdk 35
 
     defaultConfig {
         minSdk 19
-        targetSdk 32
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -44,10 +44,10 @@ dependencies {
 }
 
 task generateSourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier 'sources'
+    from android.sourceSets.main.java.getSrcDirs()
+    archiveClassifier.set('sources')
+    destinationDirectory.set(file("$buildDir/generated/sourcesJar"))
 }
-
 
 afterEvaluate {
     publishing {
@@ -57,7 +57,7 @@ afterEvaluate {
 //                groupId = 'com.github.timmymike'
 //                artifactId = 'LogTool'
                 // 上傳 source code，這樣使用方可以看到註解
-                artifact generateSourcesJar
+//                artifact generateSourcesJar
             }
         }
     }

@@ -4,14 +4,7 @@ import android.os.Build
 import android.os.Environment
 import android.os.StatFs
 import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.runBlocking
-import org.json.JSONArray
-import org.json.JSONObject
 import java.io.*
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
@@ -229,9 +222,9 @@ private fun writeToFile(filePath: File, msg: String, writeType: WriteType) {
 
         wrapFile?.catchMsg?.apply {
             add(msg)
-            takeIf { it.size >= (LogOption.COLLECT_LOG_SIZE) || wrapFile.writeType == WriteType.Single }
+            takeIf { it.size >= (LogOption.COLLECT_LOG_SIZE) || wrapFile?.writeType == WriteType.Single }
                 ?.joinToString("")
-                ?.let { wrapFile.storeFile?.appendText(it) }
+                ?.let { wrapFile?.storeFile?.appendText(it) }
                 ?.also { clear() }
         }
     } catch (e: IOException) {
